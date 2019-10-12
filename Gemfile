@@ -13,6 +13,7 @@ gem 'sass-rails', '~> 5'
 gem 'uglifier'
 gem 'coffee-rails'
 gem 'jquery-rails'
+gem 'bootstrap-sass'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 4.0'
