@@ -56,6 +56,6 @@ first.last@foo.jp lll@kuk.com]
     assert_not @user.valid?
   end
   test "authenticated? should return false for a user with nill digest" do
-    assert_not @user.authenticated?('')
+    assert_not @user.authenticated?(:remember , '')
   end
   end
