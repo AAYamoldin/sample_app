@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     redirect_to root_path and return unless @user.activated?
   end
   def new
-    @user = User.new
+    @user = User.new#сброс полей формы?
   end
   def create
     @user = User.new(user_params)

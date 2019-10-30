@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
 validates :name,length: {maximum: 50},  presence: true
@@ -10,8 +10,19 @@ validates :password, length: {minimum: 6}, presence: true, allow_nil: true
  def activate
    update_columns(activated: true, activated_at: Time.zone.now )
  end
+  def password_reset_expired?#проверка не устарела ли ссылка на восстановление пароля из password_resets_controller
+    reset_sent_at < 2.hours.ago#reset_sent_at лежит в бд юзера в add_reset_to_users и создается при клике на
+  end
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+  def create_reset_digest#переход в данный метод из password_reset#create
+    self.reset_token = User.new_token#self- переменная данного класса(определена в attr_acessor) генериться новый токен
+    update_attribute(:reset_digest, User.digest(reset_token))#изменяем атрибут reset_digest в соответствии с токеном(те генерим новый пароль временный?)
+    update_attribute(:reset_sent_at, Time.zone.now)#обновляем время изменения пароля
+  end
+  def send_password_reset_email#переход в данный метод из password_reset#create
+    UserMailer.password_reset(self).deliver_now#переход в мэйлер User_Mailer метод password_reset где (self) это наш юзер из базы данных
   end
   def downcase_email
     self.email = email.downcase
