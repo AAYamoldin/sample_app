@@ -20,4 +20,6 @@ Rails.application.routes.draw do
 resources :users
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]#соответсвует RESTful маршрутам прописанным в табл 12.1
+  resources :microposts,          only: [:create, :destroy]#cooтвествие ресфул маршрутам для микропостов(таблица 13.2)
+
 end

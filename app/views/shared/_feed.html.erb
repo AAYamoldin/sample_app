@@ -1,0 +1,6 @@
+<% if @feed_items.any? %> <%# shared папка служит как склад html кода, который с помощью render 'shared/feed' можно вставить в опрелеоенную часть %>
+  <ol class="microposts">
+    <%= render @feed_items %> <%# блок применяется во вьюхе static_pages так что переменная @feed_items подгружается(рендерится) из соответствующего контролера %>
+  </ol>
+  <%= will_paginate @feed_items, params: {controller: :static_pages, action: :home} %>
+<% end %>

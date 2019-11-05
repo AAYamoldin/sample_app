@@ -3,9 +3,19 @@
   <aside class="col-md-4">
     <section class="user_info">
       <h1>
-        <%= gravatar_for @user %>
-       <%#  <%= @user.name %>
+        <% gravatar_for @user %>
+       <%=  @user.name %>
       </h1>
     </section>
   </aside>
+  <div class="col-md-8">
+    <% if @user.microposts.any? %>
+      <h3>Microposts (<%= @user.microposts.count %>)</h3>
+      <ol class="microposts"> <%# внутри данного класса belongs_to определяется наследственность к юзеру %>
+        <%= render @microposts %> <%# подгруз всех микропостов из бд %>
+      </ol>
+      <%= will_paginate @microposts %> <%# возвращение страницы в юзер контроллер(тк эта вьха оттуда) в метод show со значением page: params[:page] %>
+    <% end %>
+  </div>
+
 </div>

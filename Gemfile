@@ -10,6 +10,11 @@ gem 'rails', '~> 6.0.0'
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5'
+gem 'active_storage_validations' #гем для отслеживания валидации по размеру файла или по расширению и т.п.
+
+gem 'image_processing'#данные два гема установлены для image processing чтобы мы могли изменять размер загруженной на сервер картинки под подходящий нам
+gem 'mini_magick'
+
 gem 'uglifier'
 gem 'coffee-rails'
 gem 'faker'
@@ -66,6 +71,7 @@ end
 
 group :production do
   gem 'pg'
+  gem 'aws-sdk-s3', require: false #гем для хранения изображений в облаке(продакшн гем)
 end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

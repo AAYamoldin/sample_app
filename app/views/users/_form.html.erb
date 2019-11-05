@@ -1,6 +1,6 @@
 
     <%= form_with(model: @user, local: true) do |f| %>
-      <%= render 'shared/error_messages' %>
+      <%= render 'shared/error_messages', object: f.object %> <%# для универсальной генерации ошибок вводим переменную object которая принимает в данном случае значение @user подробнее см      _error_messages.html.erb"%>
 
       <%= f.label :name %>
       <%= f.text_field :name, class: 'form-control' %>
