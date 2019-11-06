@@ -100,7 +100,7 @@ Rails.application.configure do
 
   config.active_storage.service = :amazon
 
-  # Do not dump schema after migrations.
+  # Do not dump schema after migrations
   config.active_record.dump_schema_after_migration = false
 
   # Inserts middleware to perform automatic connection switching.

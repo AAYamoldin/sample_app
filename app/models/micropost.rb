@@ -1,5 +1,5 @@
 class Micropost < ApplicationRecord
-  belongs_to :user
+  belongs_to :user#так писать можно, потому что таблица микропоста содержит user_id атрибут
   has_one_attached :image#микропосту соответсвует один параметр из ()image) из Active storage базы данных
   default_scope -> {order(created_at: :desc)}#указываем на порядок вызывания постов из бд. по снизходящей для столбца created_at
   validates :user_id, presence: true

@@ -8,10 +8,44 @@ VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 has_secure_password
 validates :password, length: {minimum: 6}, presence: true, allow_nil: true
   has_many :microposts, dependent: :destroy #множественное число потомуч то так всегда в has_many. Говорит, что если юзер будет удален, то и зависимые микропосты будут удалены
+has_many :active_relationships,#юзер имеет много связей
+         class_name: "Relationship",#определенных в модели релайшешшипс
+         foreign_key: "follower_id",#внешний ключ фолловер ид(ключ поступаютщий из юзер запрос)(отслеживает кто? follower_id(фикс) отслеживает кого? множество индексов столбца followed_id)
+         dependent: :destroy#при удалении юзера удалять и фоловерство
+  has_many :following, through: :active_relationships, source: :followed#юзер имеет много фоловеров, которые определяются(ищутся) через модель active_relationships
+  #причем источником массива following является набор followed идентификаторов
+  #те из модели(таблицы) юзера берется айди, пихается в актив_релатионшипс, ищуются соответсвия в folloded_id(переменная followed), забираются идексы кого нашли
+  # и перебрасываемся в модель(таблицу) user.following где по найденным индексам сопоставляются информация о юзерах
+  # Follows a user.
+  has_many :passive_relationships, class_name:  "Relationship",
+           foreign_key: "followed_id",#в обратную сторону: отслеживают кого? фикс followed_id отслеживают кто? иножество индексов follower_id
+           dependent:   :destroy
+  has_many :followers, through: :passive_relationships, source: :follower#имеет много фоловеров, которые определяются из followerя
+  def follow(other_user)
+    following << other_user
+  end
+
+  # Unfollows a user.
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  # Returns true if the current user is following the other user.
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
+
+
 
   def feed#добавляем фид чтобы видеть все микропосты юзера на его странице
-   Micropost.where("user_id = ?", id)#where выбирает по данному юзеру, ? гарантирует что id правильно экранируется
- end
+   #where выбирает по данному юзеру, ? гарантирует что id правильно экранируется
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE  follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+
+  end
 
   def activate
    update_columns(activated: true, activated_at: Time.zone.now )

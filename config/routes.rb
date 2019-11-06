@@ -17,9 +17,14 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-resources :users
+resources :users do#создание ссылок на фоловер\фоловинг
+  member do
+    get :following, :followers
+  end
+end
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :create, :edit, :update]#соответсвует RESTful маршрутам прописанным в табл 12.1
   resources :microposts,          only: [:create, :destroy]#cooтвествие ресфул маршрутам для микропостов(таблица 13.2)
+  resources :relationships,       only: [:create, :destroy]
 
 end
